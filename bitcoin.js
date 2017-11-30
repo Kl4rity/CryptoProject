@@ -2,7 +2,25 @@
 // --> for Bitcoin
 // Bases calculations on the past X hours of transactions
 BitcoinDataHandler = {
-  nGetCutOffTime : function (hours) {
+  bitcoinAvgTransactionFee : function () {
+    var lsBCData = BitcoinDataHandler.httpGetSync("https://api.smartbit.com.au/v1/blockchain/blocks?limit=40");
+    var nBlockLevelAvg = BitcoinDataHandler.nCalculateBlockLevelAvg(lsBCData);
+    var nCurrentBitcoinPrice = BitcoinDataHandler.nGetCurrentBitcoinPrice();
+    var nAvgPriceInUSD = nBlockLevelAvg * nCurrentBitcoinPrice;
+    nAvgPriceInUSD = Math.round(nAvgPriceInUSD*100)/100;
+    console.log(nAvgPriceInUSD);
+  }
+  , nGetCurrentBitcoinPrice(){
+    var lsPriceData = BitcoinDataHandler.httpGetSync("https://api.smartbit.com.au/v1/exchange-rates");
+    var nUSDPrice;
+    lsPriceData.exchange_rates.forEach(function(currency){
+      if (currency.code = "USD"){
+        nUSDPrice = currency.rate;
+      }
+    });
+    return nUSDPrice;
+  }
+  ,nGetCutOffTime : function (hours) {
     currentUnixTime = Math.round((Date.now()/1000));
     minutes = hours * 60;
     seconds = minutes * 60;
@@ -17,7 +35,6 @@ BitcoinDataHandler = {
         lsBlocksInTimeframe.push(aBlock);
       }
     });
-    console.log(lsBlocksInTimeframe);
     return lsBlocksInTimeframe;
   }
   ,nCalculateBlockLevelAvg : function(lsBlocks){
@@ -31,24 +48,18 @@ BitcoinDataHandler = {
       return a+b;
     });
     var nAvgFee = nSumOfAverages / lsAvgFees.length;
-    console.log(nAvgFee);
+    return nAvgFee;
   }
-  ,httpGetAsync : function(theURL){
+  ,httpGetSync : function(theURL){
     var xmlHttp = new XMLHttpRequest();
-      xmlHttp.open("GET", theURL, true);
+      xmlHttp.open("GET", theURL, false);
       xmlHttp.send(null);
-      xmlHttp.onreadystatechange = function(){
-        if (xmlHttp.readyState == 4 && xmlHttp.status == 200){
-          var lsBlocks = JSON.parse(xmlHttp.responseText);
-          console.log(lsBlocks);
-          BitcoinDataHandler.nCalculateBlockLevelAvg(lsBlocks);
-        }
-    }
+      var lsApiJson = JSON.parse(xmlHttp.responseText);
+      return lsApiJson;
   }
 };
 
 // Minimum fee for block
 
 // Define the functions and call them onreadystatechange.
-
-console.log(BitcoinDataHandler.httpGetAsync("https://api.smartbit.com.au/v1/blockchain/blocks?limit=40"));
+BitcoinDataHandler.bitcoinAvgTransactionFee();
