@@ -5,4 +5,4 @@ var blocks = new XMLHttpRequest();
 
 rawdata.push(blocks.responseText);
 
-console.log(rawdata);
+console.log(rawdata.toString());
