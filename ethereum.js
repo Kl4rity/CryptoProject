@@ -4,22 +4,25 @@ var oBlocks = new XMLHttpRequest();
     oBlocks.send();
 
 
+var oEthPriceFeed = new XMLHttpRequest();
+    oEthPriceFeed.open("GET", "https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=BTC,USD,EUR", false);
+    oEthPriceFeed.send();
+
 var oData = JSON.parse(oBlocks.responseText);
+var oEthPrice = JSON.parse(oEthPriceFeed.responseText);
+var nEthPriceUSD = oEthPrice["USD"];
 
 var fAverageFee = function(){
-  var nTxcount = 0;
-  nTxcount = nTxcount + oData.data.forEach(function(block){
-    console.log(block.tx_count);
-    return block.tx_count;
+  const nWeiToEth = 1/(10**18);
+  nTxcount = 0;
+  oData.data.forEach(function(block){
+    nTxcount = nTxcount + block.tx_count;
   });
-  var nTxfees = 0;
-  nTxfees = nTxfees + oData.data.forEach(function(block){
-    console.log(block.totalFee);
-    return block.totalFee;
+  nTxfees = 0;
+  oData.data.forEach(function(block){
+    nTxfees = nTxfees + block.totalFee;
   });
-  return nTxfees;
-  return nTxcount;
-}
-console.log(oBlocks);
-console.log(oData);
-console.log(fAverageFee());
+  return Math.round((nTxfees/nTxcount) * nWeiToEth * nEthPriceUSD * 100)/100;
+};
+
+console.log("The avg. transaction fee of the Ethereum Network is $" + fAverageFee() + ".");
