@@ -1,6 +1,6 @@
 
 var oBlocks = new XMLHttpRequest();
-    oBlocks.open("GET", "https://etherchain.org/api/blocks/0/2", false);
+    oBlocks.open("GET", "https://etherchain.org/api/blocks/0/20", false);
     oBlocks.send();
 
 
