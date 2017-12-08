@@ -2,18 +2,59 @@
 // --> for Bitcoin
 // Bases calculations on the past X hours of transactions
 BitcoinDataHandler = {
-  bitcoinAvgTransactionFee : function () {
-    var lsBCData = BitcoinDataHandler.httpGetSync("https://api.smartbit.com.au/v1/blockchain/blocks?limit=40");
-    var nBlockLevelAvg = BitcoinDataHandler.nCalculateBlockLevelAvg(lsBCData);
+  lsApiJson : []
+  ,lsExchangeRates : []
+  ,init : function(){
+    // Request for Blocks
+
+    var promise = BitcoinDataHandler.httpGetAsync("https://api.smartbit.com.au/v1/blockchain/blocks?limit=40");
+    promise.then(function(blocks){
+      lsApiJson = blocks;
+      return BitcoinDataHandler.httpGetAsync("https://api.smartbit.com.au/v1/exchange-rates");
+    }).then(function(prices){
+      lsExchangeRates = prices;
+    }).then(function(){
+      BitcoinDataHandler.bitcoinAvgTransactionFee();
+      console.log('done.');
+    })
+
+    // var xhrBlocks = new XMLHttpRequest();
+    //   xhrBlocks.open("GET", "https://api.smartbit.com.au/v1/blockchain/blocks?limit=40", true);
+    //
+    //   xhrBlocks.onload = function (){
+    //     if (xhrBlocks.status == 200){
+    //       lsApiJson = JSON.parse(xhrBlocks.responseText);
+    //       console.log(lsApiJson);
+    //     }
+    //   };
+    //
+    //   xhrBlocks.send(null);
+    //
+    //   // Request for Price
+    // var xhrPrice = new XMLHttpRequest();
+    //     xhrPrice.open("GET", "https://api.smartbit.com.au/v1/exchange-rates", true);
+    //
+    //     xhrPrice.onload = function (){
+    //       if (xhrPrice.status == 200){
+    //         lsExchangeRates = JSON.parse(xhrPrice.responseText);
+    //         console.log(lsExchangeRates);
+    //       }
+    //     };
+    //
+    //     xhrPrice.send(null);
+
+  }
+  ,bitcoinAvgTransactionFee : function () {
+    var nBlockLevelAvg = BitcoinDataHandler.nCalculateBlockLevelAvg(lsApiJson);
     var nCurrentBitcoinPrice = BitcoinDataHandler.nGetCurrentBitcoinPrice();
     var nAvgPriceInUSD = nBlockLevelAvg * nCurrentBitcoinPrice;
     nAvgPriceInUSD = Math.round(nAvgPriceInUSD*100)/100;
     console.log(nAvgPriceInUSD);
+    document.getElementById('Bitcoin-Price').innerHTML = "Current avg. Bitcoin Transaction-Price: " + nAvgPriceInUSD + "$";
   }
-  , nGetCurrentBitcoinPrice(){
-    var lsPriceData = BitcoinDataHandler.httpGetSync("https://api.smartbit.com.au/v1/exchange-rates");
+  ,nGetCurrentBitcoinPrice(){
     var nUSDPrice;
-    lsPriceData.exchange_rates.forEach(function(currency){
+    lsExchangeRates.exchange_rates.forEach(function(currency){
       if (currency.code = "USD"){
         nUSDPrice = currency.rate;
       }
@@ -27,18 +68,18 @@ BitcoinDataHandler = {
     cutOffTime = currentUnixTime - seconds;
     return cutOffTime;
   }
-  ,lsSelectBlocksInTimeframe : function(lsBlocks){
+  ,lsSelectBlocksInTimeframe : function(){
     nUnixCutOffTime = BitcoinDataHandler.nGetCutOffTime(3);
     var lsBlocksInTimeframe = [];
-    lsBlocks.blocks.forEach(function(aBlock){
+    lsApiJson.blocks.forEach(function(aBlock){
       if (aBlock.time >= nUnixCutOffTime){
         lsBlocksInTimeframe.push(aBlock);
       }
     });
     return lsBlocksInTimeframe;
   }
-  ,nCalculateBlockLevelAvg : function(lsBlocks){
-    var lsBlocksInTimeframe = BitcoinDataHandler.lsSelectBlocksInTimeframe(lsBlocks);
+  ,nCalculateBlockLevelAvg : function(){
+    var lsBlocksInTimeframe = BitcoinDataHandler.lsSelectBlocksInTimeframe();
     var lsAvgFees = [];
     lsBlocksInTimeframe.forEach(function(aBlock){
       var nAvgFeeInBlock = (aBlock.fees / aBlock.transaction_count);
@@ -50,16 +91,22 @@ BitcoinDataHandler = {
     var nAvgFee = nSumOfAverages / lsAvgFees.length;
     return nAvgFee;
   }
-  ,httpGetSync : function(theURL){
-    var xmlHttp = new XMLHttpRequest();
-      xmlHttp.open("GET", theURL, false);
-      xmlHttp.send(null);
-      var lsApiJson = JSON.parse(xmlHttp.responseText);
-      return lsApiJson;
+  ,httpGetAsync : function(theURL){
+    return new Promise(function(resolve, reject){
+      var xmlHttp = new XMLHttpRequest();
+      xmlHttp.open("GET", theURL, true);
+
+        xmlHttp.onload = function (){
+          if (xmlHttp.status == 200){
+            resolve(JSON.parse(xmlHttp.responseText));
+          } else {
+            reject(xmlHttp.statusText);
+          }
+        };
+        xmlHttp.onerror = function (){
+          reject(xmlHttp.statusText);
+        }
+        xmlHttp.send(null);
+    });
   }
 };
-
-// Minimum fee for block
-
-// Define the functions and call them onreadystatechange.
-BitcoinDataHandler.bitcoinAvgTransactionFee();
