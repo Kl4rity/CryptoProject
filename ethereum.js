@@ -2,43 +2,19 @@ EthereumDataHandler = {
   oDataBlocks : {},
   nEthPriceUSD : 0,
   init : function(){
-      var oBlocks = new XMLHttpRequest();
-        oBlocks.open('GET', "https://etherchain.org/api/blocks/0/1", true);
-
-        oBlocks.onload = function(){
-          if(oBlocks.status == 200){
-            EthereumDataHandler.oDataBlocks = JSON.parse(this.responseText);
-            //return EthereumDataHandler.oDataBlocks;
-            console.log(EthereumDataHandler.oDataBlocks);
-          } else {
-            console.log("ERROR:", this.statusText);
-          }
-        };
-        oBlocks.onerror = function(){
-          console.log('Network error');
-        };
-        oBlocks.send();
-
-
-      var oEthPriceFeed = new XMLHttpRequest();
-        oEthPriceFeed.open('GET', "https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=BTC,USD,EUR", true);
-
-        oEthPriceFeed.onload = function(){
-          if(oEthPriceFeed.status == 200){
-            var oDataPrice = JSON.parse(this.responseText);
-            EthereumDataHandler.nEthPriceUSD = oDataPrice["USD"];
-            //return EthereumDataHandler.nEthPriceUSD;
-            console.log(EthereumDataHandler.nEthPriceUSD);
-          } else {
-            console.log("ERROR:", this.statusText);
-          }
-        };
-        oEthPriceFeed.onerror = function(){
-          console.log('Network error');
-        };
-        oEthPriceFeed.send();
-  console.log("done");
+      // Request for Blocks
+      var promise = EthereumDataHandler.httpGetAsync("https://etherchain.org/api/blocks/0/1");
+      promise.then(function(blocks){
+        oDataBlocks = blocks;
+        return EthereumDataHandler.httpGetAsync("https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=BTC,USD,EUR");
+      }).then(function(prices){
+        nEthPriceUSD = prices["USD"];
+      }).then(function(){
+        EthereumDataHandler.averageFee();
+        console.log('done.');
+      })
   },
+
 //console.log(oDataBlocks);
 //console.log(nEthPriceUSD);
 
@@ -53,7 +29,7 @@ EthereumDataHandler = {
       nTxfees = nTxfees + block.totalFee;
     });
       return Math.round((nTxfees/nTxcount) * nWeiToEth * EthereumDataHandler.nEthPriceUSD * 100)/100;
-  }
+  },
 
   httpGetAsync : function(theURL){
     return new Promise(function(resolve, reject){
@@ -78,7 +54,7 @@ EthereumDataHandler = {
 
 console.log(EthereumDataHandler.nEthPriceUSD);
 console.log(EthereumDataHandler.oDataBlocks);
-EthereumDataHandler.init();
+EthereumDataHandler.averageFee();
 
 
 // console.log("The avg. transaction fee of the Ethereum Network is $" + EthereumDataHandler.averageFee() + ".");
