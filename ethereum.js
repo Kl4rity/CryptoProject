@@ -1,16 +1,38 @@
 
 var oBlocks = new XMLHttpRequest();
-    oBlocks.open("GET", "https://etherchain.org/api/blocks/0/20", false);
+    oBlocks.open('GET', "https://etherchain.org/api/blocks/0/20", true);
+
+    oBlocks.onload = function(){
+      if(oBlocks.status == 200){
+        var oData = JSON.parse(this.responseText);
+        return oData;
+      } else {
+        console.log("ERROR:", this.statusText);
+      }
+    };
+    oBlocks.onerror = function(){
+      console.log('Network error');
+    };
     oBlocks.send();
 
 
 var oEthPriceFeed = new XMLHttpRequest();
-    oEthPriceFeed.open("GET", "https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=BTC,USD,EUR", false);
-    oEthPriceFeed.send();
+    oEthPriceFeed.open('GET', "https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=BTC,USD,EUR", true);
 
-var oData = JSON.parse(oBlocks.responseText);
-var oEthPrice = JSON.parse(oEthPriceFeed.responseText);
-var nEthPriceUSD = oEthPrice["USD"];
+    oEthPriceFeed.onload = function(){
+      if(oEthPriceFeed.status == 200){
+        var oData = JSON.parse(this.responseText);
+        var nEthPriceUSD = oData["USD"];
+        return nEthPriceUSD;
+        } else {
+          console.log("ERROR:", this.statusText);
+        }
+      };
+      oEthPriceFeed.onerror = function(){
+        console.log('Network error');
+      };
+      oEthPriceFeed.send();
+
 
 var fAverageFee = function(){
   const nWeiToEth = 1/(10**18);
