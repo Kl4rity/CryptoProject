@@ -54,7 +54,7 @@ EthereumDataHandler = {
 
 // console.log(EthereumDataHandler.nEthPriceUSD);
 // console.log(EthereumDataHandler.oDataBlocks);
-EthereumDataHandler.init();
+//EthereumDataHandler.init();
 
 
 // console.log("The avg. transaction fee of the Ethereum Network is $" + EthereumDataHandler.averageFee() + ".");
