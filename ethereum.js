@@ -55,8 +55,23 @@ EthereumDataHandler = {
       return Math.round((nTxfees/nTxcount) * nWeiToEth * EthereumDataHandler.nEthPriceUSD * 100)/100;
   }
 
-  getAsyncRequest : function(url){
-    
+  httpGetAsync : function(theURL){
+    return new Promise(function(resolve, reject){
+      var xmlHttp = new XMLHttpRequest();
+      xmlHttp.open("GET", theURL, true);
+
+        xmlHttp.onload = function (){
+          if (xmlHttp.status == 200){
+            resolve(JSON.parse(xmlHttp.responseText));
+          } else {
+            reject(xmlHttp.statusText);
+          }
+        };
+        xmlHttp.onerror = function (){
+          reject(xmlHttp.statusText);
+        }
+        xmlHttp.send(null);
+    });
   }
 
 };
