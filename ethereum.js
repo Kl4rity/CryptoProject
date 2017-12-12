@@ -3,8 +3,8 @@ EthereumDataHandler = {
   nEthPriceUSD : 0,
   init : function(){
       // Request for Blocks
-      var promise = EthereumDataHandler.httpGetAsync("https://etherchain.org/api/blocks/0/40");
-      promise.then(function(blocks){
+      var pRequest = EthereumDataHandler.httpGetAsync("https://etherchain.org/api/blocks/0/40");
+      pRequest.then(function(blocks){
         EthereumDataHandler.oDataBlocks = blocks;
         return EthereumDataHandler.httpGetAsync("https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=BTC,USD,EUR");
       }).then(function(prices){
