@@ -3,8 +3,8 @@ EthereumDataHandler = {
   nEthPriceUSD : 0,
   init : function(){
       // Request for Blocks
-      var promise = EthereumDataHandler.httpGetAsync("https://etherchain.org/api/blocks/0/1");
-      promise.then(function(blocks){
+      var pRequest = EthereumDataHandler.httpGetAsync("https://etherchain.org/api/blocks/0/40");
+      pRequest.then(function(blocks){
         EthereumDataHandler.oDataBlocks = blocks;
         return EthereumDataHandler.httpGetAsync("https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=BTC,USD,EUR");
       }).then(function(prices){
@@ -14,9 +14,6 @@ EthereumDataHandler = {
         console.log('done.');
       })
   },
-
-//console.log(oDataBlocks);
-//console.log(nEthPriceUSD);
 
   averageFee : function(){
     const nWeiToEth = 1/(10**18);
@@ -28,8 +25,8 @@ EthereumDataHandler = {
     EthereumDataHandler.oDataBlocks.data.forEach(function(block){
       nTxfees = nTxfees + block.totalFee;
     });
-      var nInsert = Math.round((nTxfees/nTxcount) * nWeiToEth * EthereumDataHandler.nEthPriceUSD * 100)/100;
-      document.getElementById('Ethereum-Price').innerHTML = "Current avg. Ethereum Transaction-Price: " + nInsert + "$";
+      var nFee = Math.round((nTxfees/nTxcount) * nWeiToEth * EthereumDataHandler.nEthPriceUSD * 100)/100;
+      document.getElementById('Ethereum-Price').innerHTML = "Current avg. Ethereum Transaction-Price: " + nFee + "$";
   },
 
   httpGetAsync : function(theURL){
@@ -52,10 +49,3 @@ EthereumDataHandler = {
   }
 
 };
-
-// console.log(EthereumDataHandler.nEthPriceUSD);
-// console.log(EthereumDataHandler.oDataBlocks);
-//EthereumDataHandler.init();
-
-
-// console.log("The avg. transaction fee of the Ethereum Network is $" + EthereumDataHandler.averageFee() + ".");

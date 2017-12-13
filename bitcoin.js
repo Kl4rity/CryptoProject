@@ -18,30 +18,6 @@ BitcoinDataHandler = {
       console.log('done.');
     })
 
-    // var xhrBlocks = new XMLHttpRequest();
-    //   xhrBlocks.open("GET", "https://api.smartbit.com.au/v1/blockchain/blocks?limit=40", true);
-    //
-    //   xhrBlocks.onload = function (){
-    //     if (xhrBlocks.status == 200){
-    //       lsApiJson = JSON.parse(xhrBlocks.responseText);
-    //       console.log(lsApiJson);
-    //     }
-    //   };
-    //
-    //   xhrBlocks.send(null);
-    //
-    //   // Request for Price
-    // var xhrPrice = new XMLHttpRequest();
-    //     xhrPrice.open("GET", "https://api.smartbit.com.au/v1/exchange-rates", true);
-    //
-    //     xhrPrice.onload = function (){
-    //       if (xhrPrice.status == 200){
-    //         lsExchangeRates = JSON.parse(xhrPrice.responseText);
-    //         console.log(lsExchangeRates);
-    //       }
-    //     };
-    //
-    //     xhrPrice.send(null);
 
   }
   ,bitcoinAvgTransactionFee : function () {
