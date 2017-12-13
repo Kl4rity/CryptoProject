@@ -26,7 +26,7 @@ EthereumDataHandler = {
       nTxfees = nTxfees + block.totalFee;
     });
       var nFee = Math.round((nTxfees/nTxcount) * nWeiToEth * EthereumDataHandler.nEthPriceUSD * 100)/100;
-      document.getElementById('Ethereum-Price').innerHTML = "Current avg. Ethereum Transaction-Price: " + nFee + "$";
+      document.getElementById('Ethereum-Price').innerHTML = nFee + "$";
   },
 
   httpGetAsync : function(theURL){

@@ -26,7 +26,7 @@ BitcoinDataHandler = {
     var nAvgPriceInUSD = nBlockLevelAvg * nCurrentBitcoinPrice;
     nAvgPriceInUSD = Math.round(nAvgPriceInUSD*100)/100;
     console.log(nAvgPriceInUSD);
-    document.getElementById('Bitcoin-Price').innerHTML = "Current avg. Bitcoin Transaction-Price: " + nAvgPriceInUSD + "$";
+    document.getElementById('Bitcoin-Price').innerHTML = nAvgPriceInUSD + "$";
   }
   ,nGetCurrentBitcoinPrice(){
     var nUSDPrice;
