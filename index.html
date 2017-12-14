@@ -10,13 +10,14 @@
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
-    <div class="container col-md-6">
+  <br>
+    <div class="container container-fluid">
       <table class = "table table-hover">
-        <thead class="thead-light">
+        <thead class="thead-dark">
         <tr>
-          <th scope="col"></th>
-          <th scope="col">Ø Price per Transaction</th>
-          <th scope="col">Ø Block Time</th>
+          <th scope="col" class="text-center"></th>
+          <th scope="col" class="text-center">Ø Price per Transaction</th>
+          <th scope="col" class="text-center">Ø Block Time</th>
         </tr>
         </thead>
         <tbody>
@@ -33,6 +34,17 @@
         </tbody>
       </table>
       <div class="text-center"><button id="load-data" class="btn-outline-primary">Load Chain-Data</button></div>
+      <br>
+      <table class = "table table-bordered">
+      <thead id="BlockDataHeader" class="thead-dark">
+        <tr>
+          <th scope="col">Bitcoin Block Data</th>
+        </tr>
+      </thead>
+      </table>
+      <div id="BlockData">
+
+      </div>
     </div>
     <script src="bitcoin.js"></script>
     <script src="ethereum.js"></script>

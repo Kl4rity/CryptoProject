@@ -10,14 +10,25 @@ BitcoinDataHandler = {
     var promise = BitcoinDataHandler.httpGetAsync("https://api.smartbit.com.au/v1/blockchain/blocks?limit=40");
     promise.then(function(blocks){
       lsApiJson = blocks;
+      BitcoinDataHandler.showBlockData();
       return BitcoinDataHandler.httpGetAsync("https://api.smartbit.com.au/v1/exchange-rates");
     }).then(function(prices){
       lsExchangeRates = prices;
     }).then(function(){
       BitcoinDataHandler.bitcoinAvgTransactionFee();
-      console.log('done.');
+      console.log('Bitcoin.js done.');
     })
 
+    var promiseTime = BitcoinDataHandler.httpGetAsync("https://api.smartbit.com.au/v1/blockchain/chart/block-interval?from=2017-11-14").then(function(times){
+      var nTotalTime = 0;
+      var nAverageTime = 0;
+      var nNumberOfBlocks = times.chart.data.length;
+      for (var i = 0; i < times.chart.data.length; i++){
+          nTotalTime += times.chart.data[i].y;
+      }
+      nAverageTimeMinutes = (nTotalTime / nNumberOfBlocks)/60;
+      document.getElementById("Bitcoin-Block-Time").innerHTML = nAverageTimeMinutes.toFixed(2) + " m";
+    });
 
   }
   ,bitcoinAvgTransactionFee : function () {
@@ -25,8 +36,7 @@ BitcoinDataHandler = {
     var nCurrentBitcoinPrice = BitcoinDataHandler.nGetCurrentBitcoinPrice();
     var nAvgPriceInUSD = nBlockLevelAvg * nCurrentBitcoinPrice;
     nAvgPriceInUSD = Math.round(nAvgPriceInUSD*100)/100;
-    console.log(nAvgPriceInUSD);
-    document.getElementById('Bitcoin-Price').innerHTML = nAvgPriceInUSD + "$";
+    document.getElementById('Bitcoin-Price').innerHTML = nAvgPriceInUSD + " $";
   }
   ,nGetCurrentBitcoinPrice(){
     var nUSDPrice;
@@ -84,5 +94,22 @@ BitcoinDataHandler = {
         }
         xmlHttp.send(null);
     });
+  }
+  , showBlockData : function(){
+    var dnBlockDataContainer = document.getElementById("BlockData");
+    for (var i = 0; i < lsApiJson.blocks.length; i++){
+      var dnBlockDataP = document.createElement("p");
+      dnBlockDataP.className += " preformatted";
+      dnBlockDataContainer.appendChild(dnBlockDataP);
+      dnBlockDataP.innerHTML = JSON.stringify(lsApiJson.blocks[i], null, "\t");
+      dnDelimiter = document.createElement("br");
+      dnBlockDataContainer.appendChild(dnDelimiter);
+    }
+  }
+  , showBlockDataReplacer : function(key, value){
+    if (key == "[" || key == "]" ){
+      return "";
+    }
+    return value;
   }
 };
