@@ -19,6 +19,7 @@ dnEthereumRadio.addEventListener("change", dataSelect);
 
 function dataSelect (){
       if (dnBitcoinRadio.checked == true){
+        console.log("Bitcoin is True");
         for (var i = 0; i < dnlsEthereumData.length; i++){
           dnlsEthereumData[i].classList.add("hide");
         }
@@ -26,6 +27,7 @@ function dataSelect (){
           dnlsBitcoinData[i].classList.remove("hide");
         }
       } else if (dnEthereumRadio.checked == true){
+        console.log("Ethereum is True");
         for (var i = 0; i < dnlsBitcoinData.length; i++){
           dnlsBitcoinData[i].classList.add("hide");
         }
