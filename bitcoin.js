@@ -104,6 +104,7 @@ BitcoinDataHandler = {
       dnBlockDataContainer.appendChild(dnBlockDataP);
       dnBlockDataP.innerHTML = JSON.stringify(lsApiJson.blocks[i], null, "\t");
       dnDelimiter = document.createElement("br");
+      dnDelimiter.className += " bitcoin-block";
       dnBlockDataContainer.appendChild(dnDelimiter);
     }
   }

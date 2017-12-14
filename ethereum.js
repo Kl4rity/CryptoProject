@@ -77,6 +77,7 @@ EthereumDataHandler = {
       dnBlockDataContainer.appendChild(dnBlockDataP);
       dnBlockDataP.innerHTML = JSON.stringify(oDataBlocks.data[i], null, "\t");
       dnDelimiter = document.createElement("br");
+      dnDelimiter.className += " ethereum-block";
       dnBlockDataContainer.appendChild(dnDelimiter);
     }
   },
@@ -86,9 +87,11 @@ EthereumDataHandler = {
       var dnBlockDataP = document.createElement("p");
       dnBlockDataP.className += " preformatted";
       dnBlockDataP.className += " ethereum-block";
+      dnBlockDataP.className += " hide";
       dnBlockDataContainer.appendChild(dnBlockDataP);
       dnBlockDataP.innerHTML = "Data is currently not available.";
       dnDelimiter = document.createElement("br");
+      dnDelimiter.className += " ethereum-block";
       dnBlockDataContainer.appendChild(dnDelimiter);
   },
 
