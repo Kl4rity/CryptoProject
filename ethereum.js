@@ -15,7 +15,7 @@ EthereumDataHandler = {
         EthereumDataHandler.averageFee();
       }).catch(function(error){
         document.getElementById('Ethereum-Price').innerHTML = "Data not available.";
-        EthereumDataHandler.showBlockData();
+        EthereumDataHandler.showBlockDataError();
       })
 
       //Request for average Blocktime and call averageBlocktime function
@@ -79,6 +79,17 @@ EthereumDataHandler = {
       dnDelimiter = document.createElement("br");
       dnBlockDataContainer.appendChild(dnDelimiter);
     }
+  },
+
+  showBlockDataError : function(){
+    var dnBlockDataContainer = document.getElementById("BlockData");
+      var dnBlockDataP = document.createElement("p");
+      dnBlockDataP.className += " preformatted";
+      dnBlockDataP.className += " ethereum-block";
+      dnBlockDataContainer.appendChild(dnBlockDataP);
+      dnBlockDataP.innerHTML = "Data is currently not available.";
+      dnDelimiter = document.createElement("br");
+      dnBlockDataContainer.appendChild(dnDelimiter);
   },
 
   showBlockDataReplacer : function(key, value){
