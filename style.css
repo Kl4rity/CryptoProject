@@ -6,3 +6,7 @@
   border-width: 1px;
   padding: 10px;
 }
+
+.hide {
+  visibility: hidden;
+}

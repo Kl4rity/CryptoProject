@@ -2,4 +2,35 @@
 document.getElementById("load-data").onclick = function (){
     BitcoinDataHandler.init();
     EthereumDataHandler.init();
+
+    dnlsBitcoinData = document.getElementsByClassName("bitcoin-block");
+    dnlsEthereumData = document.getElementsByClassName("ethereum-block");
+
+    for (var i = 0; i < dnlsEthereumData.length; i++){
+      dnlsEthereumData[i].classList.add("hide");
+    }
 }
+
+var dnBitcoinRadio = document.getElementById("BitcoinRadioButton");
+dnBitcoinRadio.addEventListener("change", dataSelect);
+
+var dnEthereumRadio = document.getElementById("EthereumRadioButton");
+dnEthereumRadio.addEventListener("change", dataSelect);
+
+function dataSelect (){
+      if (dnBitcoinRadio.checked == true){
+        for (var i = 0; i < dnlsEthereumData.length; i++){
+          dnlsEthereumData[i].classList.add("hide");
+        }
+        for (var i = 0; i < dnlsBitcoinData.length; i++){
+          dnlsBitcoinData[i].classList.remove("hide");
+        }
+      } else if (dnEthereumRadio.checked == true){
+        for (var i = 0; i < dnlsBitcoinData.length; i++){
+          dnlsBitcoinData[i].classList.add("hide");
+        }
+        for (var i = 0; i < dnlsEthereumData.length; i++){
+          dnlsEthereumData[i].classList.remove("hide");
+        }
+      }
+};

@@ -38,9 +38,19 @@
       <table class = "table table-bordered">
       <thead id="BlockDataHeader" class="thead-dark">
         <tr>
-          <th scope="col">Bitcoin Block Data</th>
+          <th class="BlockDataHeaderRow" scope="col">Block Data</th>
         </tr>
       </thead>
+      <tbody>
+        <tr>
+          <td class ="text-center">
+            <input type="radio" id="BitcoinRadioButton" name="BlockDataRadio" value="Bitcoin" checked="true">
+            <label for="BitcoinRadioButton">Bitcoin Data</label>
+            <input type="radio" id="EthereumRadioButton" name="BlockDataRadio" value="Ethereum">
+            <label for="EthereumRadioButton">Ethereum Data</label>
+          </td>
+        </tr>
+      </tbody>
       </table>
       <div id="BlockData">
 

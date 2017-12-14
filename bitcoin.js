@@ -100,16 +100,11 @@ BitcoinDataHandler = {
     for (var i = 0; i < lsApiJson.blocks.length; i++){
       var dnBlockDataP = document.createElement("p");
       dnBlockDataP.className += " preformatted";
+      dnBlockDataP.className += " bitcoin-block";
       dnBlockDataContainer.appendChild(dnBlockDataP);
       dnBlockDataP.innerHTML = JSON.stringify(lsApiJson.blocks[i], null, "\t");
       dnDelimiter = document.createElement("br");
       dnBlockDataContainer.appendChild(dnDelimiter);
     }
-  }
-  , showBlockDataReplacer : function(key, value){
-    if (key == "[" || key == "]" ){
-      return "";
-    }
-    return value;
   }
 };
