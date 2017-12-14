@@ -33,6 +33,7 @@ EthereumDataHandler = {
     return new Promise(function(resolve, reject){
       var xmlHttp = new XMLHttpRequest();
       xmlHttp.open("GET", theURL, true);
+      xmlHttp.withCredentials = true;
 
         xmlHttp.onload = function (){
           if (xmlHttp.status == 200){
