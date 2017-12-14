@@ -7,6 +7,8 @@ EthereumDataHandler = {
       var pRequest = EthereumDataHandler.httpGetAsync("https://api.nanopool.org/v1/eth/network/avgblocktime");
       pRequest.then(function(time){
         EthereumDataHandler.nEthAvgBlockTime = time["data"];
+      }).catch(function(error){
+        document.getElementById('Ethereum-Block-Time').innerHTML = "Data not available";
       }).then(function(){
         EthereumDataHandler.averageBlockTime();
         return EthereumDataHandler.httpGetAsync("https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=BTC,USD,EUR");
@@ -45,7 +47,6 @@ EthereumDataHandler = {
     return new Promise(function(resolve, reject){
       var xmlHttp = new XMLHttpRequest();
       xmlHttp.open("GET", theURL, true);
-      //xmlHttp.withCredentials = true;
 
         xmlHttp.onload = function (){
           if (xmlHttp.status == 200){
