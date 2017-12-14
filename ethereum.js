@@ -3,25 +3,31 @@ EthereumDataHandler = {
   nEthPriceUSD : 0,
   nEthAvgBlockTime : 0,
   init : function(){
-      // Request for Blocks
-      var pRequest = EthereumDataHandler.httpGetAsync("https://api.nanopool.org/v1/eth/network/avgblocktime");
-      pRequest.then(function(time){
-        EthereumDataHandler.nEthAvgBlockTime = time["data"];
-      }).catch(function(error){
-        document.getElementById('Ethereum-Block-Time').innerHTML = "Data not available";
-      }).then(function(){
-        EthereumDataHandler.averageBlockTime();
-        return EthereumDataHandler.httpGetAsync("https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=BTC,USD,EUR");
-      }).then(function(prices){
-        EthereumDataHandler.nEthPriceUSD = prices["USD"];
-        return EthereumDataHandler.httpGetAsync("https://etherchain.org/api/blocks/0/40");
-      }).then(function(blocks){
+      // Request for Blockdata and Price and call averageFee function
+      var pFeeRequest = EthereumDataHandler.httpGetAsync("https://etherchain.org/api/blocks/0/40");
+      pFeeRequest.then(function(blocks){
         EthereumDataHandler.oDataBlocks = blocks;
+        EthereumDataHandler.showBlockData();
+        return EthereumDataHandler.httpGetAsync("https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=BTC,USD,EUR");
+      }).then(function(){
+        EthereumDataHandler.nEthPriceUSD = prices["USD"];
       }).then(function(){
         EthereumDataHandler.averageFee();
       }).catch(function(error){
         document.getElementById('Ethereum-Price').innerHTML = "Data not available.";
+        EthereumDataHandler.showBlockData();
       })
+
+      //Request for average Blocktime and call averageBlocktime function
+      var pTimeRequest = EthereumDataHandler.httpGetAsync("https://api.nanopool.org/v1/eth/network/avgblocktime");
+      pTimeRequest.then(function(time){
+        EthereumDataHandler.nEthAvgBlockTime = time["data"];
+      }).then(function(){
+        EthereumDataHandler.averageBlockTime();
+      }).catch(function(error){
+        document.getElementById('Ethereum-Block-Time').innerHTML = "Data not available.";
+      })
+
   },
 
   averageFee : function(){
@@ -39,8 +45,8 @@ EthereumDataHandler = {
   },
 
   averageBlockTime : function(){
-    var nAvgTime = Math.round(EthereumDataHandler.nEthAvgBlockTime * 1000)/1000;
-    document.getElementById('Ethereum-Block-Time').innerHTML = nAvgTime + "s";
+    var nAvgTime = Math.round(EthereumDataHandler.nEthAvgBlockTime * 100)/100;
+    document.getElementById('Ethereum-Block-Time').innerHTML = nAvgTime + " s";
   },
 
   httpGetAsync : function(theURL){
@@ -60,6 +66,26 @@ EthereumDataHandler = {
         }
         xmlHttp.send(null);
     });
+  },
+
+  showBlockData : function(){
+    var dnBlockDataContainer = document.getElementById("BlockData");
+    for (var i = 0; i < oDataBlocks.data.length; i++){
+      var dnBlockDataP = document.createElement("p");
+      dnBlockDataP.className += " preformatted";
+      dnBlockDataP.className += " ethereum-block";
+      dnBlockDataContainer.appendChild(dnBlockDataP);
+      dnBlockDataP.innerHTML = JSON.stringify(oDataBlocks.data[i], null, "\t");
+      dnDelimiter = document.createElement("br");
+      dnBlockDataContainer.appendChild(dnDelimiter);
+    }
+  },
+
+  showBlockDataReplacer : function(key, value){
+    if (key == "[" || key == "]" ){
+      return "";
+    }
+    return value;
   }
 
 };
