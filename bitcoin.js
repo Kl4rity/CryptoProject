@@ -4,6 +4,17 @@
 BitcoinDataHandler = {
   lsApiJson : []
   ,lsExchangeRates : []
+  , dataNameToDisplayNameAndList: {
+    "confirmations" : "Confirmations",
+    "hash" : "Hash",
+    "previous_block_hash" : "Previous Hash",
+    "chainwork" : "Chainwork",
+    "difficulty" : "Difficulty",
+    "fees": "Fees (BTC)",
+    "reward" : "Reward (BTC)",
+    "pool" : "Mining Pool",
+    "transaction_count" : "Mined Transactions"
+  }
   ,init : function(){
     // Request for Blocks
 
@@ -98,14 +109,31 @@ BitcoinDataHandler = {
   , showBlockData : function(){
     var dnBlockDataContainer = document.getElementById("BlockData");
     for (var i = 0; i < lsApiJson.blocks.length; i++){
-      var dnBlockDataP = document.createElement("p");
-      dnBlockDataP.className += " preformatted";
-      dnBlockDataP.className += " bitcoin-block";
-      dnBlockDataContainer.appendChild(dnBlockDataP);
-      dnBlockDataP.innerHTML = JSON.stringify(lsApiJson.blocks[i], null, "\t");
+
+      var ulBlock = document.createElement("ul");
+      ulBlock.className += "collection with-header bitcoin-block";
+      //Creating Header Line
+      var liHeaderLine = document.createElement("li");
+      liHeaderLine.className += "collection-header";
+      liHeaderLine.innerHTML = "<h4>Block #" + lsApiJson.blocks[i].height + "</h4>";
+      ulBlock.appendChild(liHeaderLine);
+
+      for (var key in BitcoinDataHandler.dataNameToDisplayNameAndList){
+        var liPieceOfBlockData = document.createElement("li");
+        liPieceOfBlockData.className += "collection-item";
+        if(key == "pool" && lsApiJson.blocks[i][key] != null){
+          liPieceOfBlockData.innerHTML = "<strong>" + BitcoinDataHandler.dataNameToDisplayNameAndList[key] + " </strong> : " + lsApiJson.blocks[i][key]["link"];
+        } else {
+          liPieceOfBlockData.innerHTML = "<strong>" + BitcoinDataHandler.dataNameToDisplayNameAndList[key] + " </strong> : " + lsApiJson.blocks[i][key];
+        }
+        ulBlock.appendChild(liPieceOfBlockData);
+      }
+
+      dnBlockDataContainer.appendChild(ulBlock);
       dnDelimiter = document.createElement("br");
       dnDelimiter.className += " bitcoin-block";
       dnBlockDataContainer.appendChild(dnDelimiter);
     }
+    dataSelect();
   }
 };

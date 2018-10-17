@@ -11,3 +11,11 @@
   visibility: hidden;
   display: none;
 }
+
+.center {
+  text-align: center;
+}
+
+.no-delimiters {
+  border:none;
+}

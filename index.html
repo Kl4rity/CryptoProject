@@ -2,58 +2,61 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Transaction Info</title>
     <link rel="stylesheet" href="style.css">
   </head>
   <body>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
   <br>
-    <div class="container container-fluid">
-      <table class = "table table-hover">
+    <div class="container">
+      <table class = "highlight">
         <thead class="thead-dark">
-        <tr>
-          <th scope="col" class="text-center"></th>
-          <th scope="col" class="text-center">Ø Cost per Transaction</th>
-          <th scope="col" class="text-center">Ø Block Time</th>
+        <tr class="no-delimiters">
+          <th scope="col" ></th>
+          <th scope="col">Ø Cost per Transaction</th>
+          <th scope="col">Ø Block Time</th>
         </tr>
         </thead>
         <tbody>
         <tr>
           <th scope="row" class="data-container">Ethereum:</th>
-          <td id="Ethereum-Price" class="text-center"></td>
-          <td id="Ethereum-Block-Time" class="text-center"></td>
+          <td id="Ethereum-Price" ></td>
+          <td id="Ethereum-Block-Time" ></td>
         </tr>
-        <tr>
+        <tr class="no-delimiters">
           <th scope="row" class="data-container">Bitcoin:</th>
-          <td id="Bitcoin-Price" class="text-center"></td>
-          <td id="Bitcoin-Block-Time" class="text-center"></td>
+          <td id="Bitcoin-Price" ></td>
+          <td id="Bitcoin-Block-Time" ></td>
         </tr>
         </tbody>
       </table>
-      <div class="text-center"><button id="load-data" class="btn-outline-primary">Load Chain-Data</button></div>
+      <br>
+      <div class = "center"><a id="load-data" class="waves-effect waves-light btn">Load Chain-Data</a></div>
       <br>
       <table class = "table table-bordered">
       <thead id="BlockDataHeader" class="thead-dark">
-        <tr>
-          <th class="BlockDataHeaderRow" scope="col">Block Data</th>
+        <tr class="no-delimiters">
+          <th class="BlockDataHeaderRow center" scope="col"><h4>Block Data<h4></h3></th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td class ="text-center">
+          <td class ="center">
+            <label for="BitcoinRadioButton">
             <input type="radio" id="BitcoinRadioButton" name="BlockDataRadio" value="Bitcoin" checked="true">
-            Bitcoin Data
-            <label for="BitcoinRadioButton"></label>
+            <span>Bitcoin Data</span>
+            </label>
+            <label for="EthereumRadioButton">
             <input type="radio" id="EthereumRadioButton" name="BlockDataRadio" value="Ethereum">
-            Ethereum Data
-            <label for="EthereumRadioButton"></label>
+            <span>Ethereum Data</span>
+            </label>
           </td>
         </tr>
       </tbody>
       </table>
+      <br>
       <div id="BlockData">
       </div>
     </div>

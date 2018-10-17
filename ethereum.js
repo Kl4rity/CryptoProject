@@ -4,7 +4,7 @@ EthereumDataHandler = {
   nEthAvgBlockTime : 0,
   init : function(){
       // Request for Blockdata and Price and call averageFee function
-      var pFeeRequest = EthereumDataHandler.httpGetAsync("https://etherchain.org/api/blocks/0/40");
+      var pFeeRequest = EthereumDataHandler.httpGetAsync("https://www.etherchain.org/api/blocks/0/40");
       pFeeRequest.then(function(blocks){
         EthereumDataHandler.oDataBlocks = blocks;
         EthereumDataHandler.showBlockData();
@@ -16,8 +16,8 @@ EthereumDataHandler = {
       }).catch(function(error){
         document.getElementById('Ethereum-Price').innerHTML = "Data not available.";
         EthereumDataHandler.showBlockDataError();
-      })
-
+    })
+      
       //Request for average Blocktime and call averageBlocktime function
       var pTimeRequest = EthereumDataHandler.httpGetAsync("https://api.nanopool.org/v1/eth/network/avgblocktime");
       pTimeRequest.then(function(time){
@@ -52,8 +52,8 @@ EthereumDataHandler = {
   httpGetAsync : function(theURL){
     return new Promise(function(resolve, reject){
       var xmlHttp = new XMLHttpRequest();
+      console.log(theURL);
       xmlHttp.open("GET", theURL, true);
-
         xmlHttp.onload = function (){
           if (xmlHttp.status == 200){
             resolve(JSON.parse(xmlHttp.responseText));
@@ -84,12 +84,16 @@ EthereumDataHandler = {
 
   showBlockDataError : function(){
     var dnBlockDataContainer = document.getElementById("BlockData");
-      var dnBlockDataP = document.createElement("p");
-      dnBlockDataP.className += " preformatted";
-      dnBlockDataP.className += " ethereum-block";
-      dnBlockDataP.className += " hide";
-      dnBlockDataContainer.appendChild(dnBlockDataP);
-      dnBlockDataP.innerHTML = "Data is currently not available.";
+
+      var ulBlock = document.createElement("ul");
+      ulBlock.className += "collection with-header ethereum-block";
+      var liHeaderLine = document.createElement("li");
+      liHeaderLine.className += "collection-header";
+      liHeaderLine.innerHTML = "<h4>Data is currently not available.</h4>";
+      ulBlock.appendChild(liHeaderLine);
+
+
+      dnBlockDataContainer.appendChild(ulBlock);
       dnDelimiter = document.createElement("br");
       dnDelimiter.className += " ethereum-block";
       dnBlockDataContainer.appendChild(dnDelimiter);
